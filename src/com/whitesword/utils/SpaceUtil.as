@@ -1,5 +1,7 @@
 package com.whitesword.utils
 {
+	import flash.utils.getQualifiedClassName;
+
 	public class SpaceUtil
 	{
 		protected static var alphabet:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -35,6 +37,11 @@ package com.whitesword.utils
 		public static function getNumeralFromNumber(number:int):String
 		{
 			return numerals.get(number);
+		}
+		
+		public static function getClassName(s:*):String
+		{
+			return getQualifiedClassName(s).split("::")[1];
 		}
 	}
 }

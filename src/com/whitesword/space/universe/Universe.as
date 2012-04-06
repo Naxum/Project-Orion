@@ -8,6 +8,8 @@ package com.whitesword.space.universe
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.net.FileReference;
+	import flash.utils.ByteArray;
 
 	public class Universe
 	{
@@ -23,29 +25,23 @@ package com.whitesword.space.universe
 			this.name = universeName;
 			this.saveFile = universeSave;
 			
-			var saveInformation:String = "";
+			var xml:XML = new XML("<xml><version>" + getVersion() + "</version><universe /></xml>");
 			
 			for(var i:int = 0; i < 1; i++)
 			{
-				var galaxy:Galaxy = new Galaxy(this);
-				
-				saveInformation += SpaceUtil.indentXML(galaxy.getSaveData(), 2);
+				var galaxy:Galaxy = new Galaxy(this).generateGalaxy();
+				galaxies.add(galaxy);
+				xml.universe.appendChild(galaxy.getSaveData());
 			}
 			
+			/*
 			var writer:FileStream = new FileStream();
 			writer.open(universeSave, FileMode.WRITE);
 			
-			writer.writeUTF(
-				"<xml>\n" +
-				"\t<version>" + Universe.getVersion() + "</version>\n" +
-				"\t<name>" + universeName + "</name>\n" + 
-				"\t<galaxies>\n" +
-				saveInformation + 
-				"\t</galaxies>\n" +
-				"</xml>"
-			);
+			writer.writeUTFBytes("<xml>"+xml.*+"</xml>");
 			
 			writer.close();
+			*/
 		}
 		
 		public function getName():String

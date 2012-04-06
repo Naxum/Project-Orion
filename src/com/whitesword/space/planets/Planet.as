@@ -6,15 +6,16 @@ package com.whitesword.space.planets
 	import com.whitesword.utils.ArrayList;
 	import com.whitesword.utils.SpaceUtil;
 
+	/**
+	 * Abstract class that Terrestrial (Rocky) planets, Gas Giants, Stars, Moons, and Dwarf Planets inherit.
+	 */
 	public class Planet
 	{
 		private var system:System;
-		protected var name:String;
-		protected var rotationSpeed:Number; //float based on earth
-		protected var mass:Number; //same
-		protected var atmosphere:PlanetAtmosphere;
-		protected var temperature:Number;
-		protected var gravity:Number;
+		private var name:String;
+		private var size:Number; // 1 = Earth/Normal size
+		private var humidity:Number;
+		private var temperature:Number;
 		
 		protected var children:ArrayList = new ArrayList(); //rings and moons
 		
@@ -35,37 +36,14 @@ package com.whitesword.space.planets
 			this.name = string;
 		}
 		
-		public function getRotationSpeed():Number
+		public function getSize():Number
 		{
-			return rotationSpeed;
+			return size;
 		}
 		
-		/**
-		 * Rotation speed is a float relative to Earth's rotation speed.
-		 */
-		public function setRotationSpeed(speed:Number):void
+		public function setSize(size:Number):void
 		{
-			this.rotationSpeed = speed;
-		}
-		
-		public function getMass():Number
-		{
-			return mass;
-		}
-		
-		public function setMass(mass:Number):void
-		{
-			this.mass = mass;
-		}
-		
-		public function getAtmosphere():PlanetAtmosphere
-		{
-			return this.atmosphere;
-		}
-		
-		public function setAtmosphere(atmosphere:PlanetAtmosphere):void
-		{
-			this.atmosphere = atmosphere;	
+			this.size = size;
 		}
 		
 		public function setTemperature(temp:Number):void
@@ -73,27 +51,36 @@ package com.whitesword.space.planets
 			this.temperature = temp;
 		}
 		
+		/**
+		 * Frozen = -1, Normal = 0, Boiling = 1
+		 */
 		public function getTemperature():Number
 		{
 			return this.temperature;
 		}
 		
-		public function getGravity():Number
+		public function getHumidity():Number
 		{
-			return this.gravity;
+			return this.humidity;
 		}
 		
-		public function setGravity(gravity:Number):void
+		/**
+		 * Dry = -1, Normal = 0, Wet = 1
+		 */
+		public function setHumidity(humidity:Number):void
 		{
-			this.gravity = gravity;
+			this.humidity = humidity;
 		}
 		
+		/**
+		 * Returns an ArrrayList of Planets
+		 */
 		public function getChildren():ArrayList
 		{
 			return children;
 		}
 		
-		public function addChild(p:Satellite):void
+		public function addChild(p:Planet):void
 		{
 			children.add(p);
 		}
@@ -103,40 +90,23 @@ package com.whitesword.space.planets
 			return system;
 		}
 		
-		public function getSaveData():String
+		public function getSaveData():XML
 		{
-			var data:String = "<planet>\n";
+			var className:String = SpaceUtil.getClassName(this);
+			var xml:XML = new XML("<" + className + " />");
 			
-			data += 
-				"\t<type>" + getQualifiedClassName(this).replace("com.whitesword.space.planets::", "") + "</type>\n" + 
-				"\t<name>" + getName() + "</name>\n" +
-				"\t<rotationSpeed>" + getRotationSpeed() + "</rotationSpeed>\n" + 
-				"\t<mass>" + getMass() + "</mass>\n" + 
-				"\t<atmosphere>\n" + SpaceUtil.indentXML(getAtmosphere().getSaveData(), 2) + "\t</atmosphere>\n" +
-				"\t<temperature>" + getTemperature() + "</temperature>\n" + 
-				"\t<gravity>" + getGravity() + "</gravity>\n" + getChildrenSaveData();
+			xml.name = getName();
+			xml.temperature = getTemperature();
+			xml.humidity = getHumidity();
+			xml.size = getSize();
+			xml.children = "";
 			
-			//TODO: save children
-			
-			data += "</planet>\n";
-			
-			return data;
-		}
-		
-		protected function getChildrenSaveData():String
-		{
-			if(this is Satellite) return "\t<children />\n";
-			
-			var data:String = "\t<children>\n";
-			
-			for each(var satellite:Satellite in children)
+			for each(var child:Planet in children)
 			{
-				data += SpaceUtil.indentXML(satellite.getSaveData(), 2);	
+				xml.children.appendChild(child.getSaveData());
 			}
 			
-			data += "\t</children>\n";
-			
-			return data;
+			return xml;
 		}
 	}
 }

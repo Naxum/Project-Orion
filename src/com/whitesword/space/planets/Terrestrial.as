@@ -13,35 +13,22 @@ package com.whitesword.space.planets
 		
 		public function generateTerrestrial():Terrestrial
 		{
+			//TODO: Distance from sun
 			var sun:Star = getSystem().getMainStar();
+			var moonRandom:int = int(Math.random() * 10);
+			var moonCount:int = moonRandom == 0 ? 2 : moonRandom < 5 ? 1 : 0;
 			
-			name = sun.getName() + " " + SpaceUtil.getLetterFromNumber(getSystem().getPlanets().size());
+			setName(sun.getName() + " " + SpaceUtil.getLetterFromNumber(getSystem().getPlanets().size()));
 			
-			mass = Math.random() * 3 + 1;
+			setSize(Math.random());
 			
-			gravity = Math.random() * 1.5 + 0.5;
+			setTemperature((Math.random() * 0.5) + (sun.getTemperature() / (getSystem().getPlanets().size()+1))); 
+			setHumidity(Math.random());
 			
-			rotationSpeed = mass + (Math.random() * 2 - 1);
-			
-			atmosphere = new PlanetAtmosphere(this);
-			
-			for(var i:int = 0; i < Math.floor(Math.random() * 4); i++)
+			for(var i:int = 0; i < moonCount; i++)
 			{
-				addChild(new Moon(this));
+				addChild(new Moon(this).generateMoon());
 			}
-			
-			return this;
-		}
-		
-		public function loadTerrestrial(name:String, mass:Number, gravity:Number, rotationSpeed:Number, atmosphere:PlanetAtmosphere, children:ArrayList):Terrestrial
-		{
-			this.name = name;
-			this.mass = mass;
-			this.gravity = gravity;
-			this.rotationSpeed = rotationSpeed;
-			//this.temperature = temperature;
-			this.atmosphere = atmosphere;
-			this.children = children;
 			
 			return this;
 		}

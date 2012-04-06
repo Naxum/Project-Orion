@@ -11,29 +11,25 @@ package com.whitesword.space.planets
 			super(system);
 		}
 		
-		public function generateGasGiant():void
+		public function generateGasGiant():GasGiant
 		{
 			var sun:Star = getSystem().getMainStar();
 			
-			name = sun.getName() + " " + SpaceUtil.getLetterFromNumber(getSystem().getPlanets().size());
+			var moonRandom:int = int(Math.random() * 3);
+			var moonCount:int = moonRandom == 0 ? int(Math.random() * 7) : moonRandom == 1 ? int(Math.random() * 4) : int(Math.random() * 2);
 			
-			mass = Math.random() * 400 + 150;
+			setName(sun.getName() + " " + SpaceUtil.getLetterFromNumber(getSystem().getPlanets().size()));
+			setSize(Math.random());
+			setTemperature((Math.random() * 0.5) + (sun.getTemperature() / (getSystem().getPlanets().size()+1))); 
+			setHumidity(Math.random());
 			
-			gravity = Math.random() * 1.8 + 0.2;
+			for(var i:int = 0; i < moonCount; i++)
+			{
+				addChild(new Moon(this).generateMoon());
+			}
 			
-			rotationSpeed = mass + (Math.random() * 2 - 1);
-			
-			atmosphere = new PlanetAtmosphere(this);
+			return this;
 		}
 		
-		public function loadGasGiant(name:String, mass:Number, gravity:Number, rotationSpeed:Number, atmosphere:PlanetAtmosphere, children:ArrayList):void
-		{
-			this.name = name;
-			this.mass = mass;
-			this.gravity = gravity;
-			this.rotationSpeed = rotationSpeed;
-			this.atmosphere = atmosphere;
-			this.children = children;
-		}
 	}
 }

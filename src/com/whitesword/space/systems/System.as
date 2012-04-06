@@ -6,7 +6,6 @@ package com.whitesword.space.systems
 	import com.whitesword.space.planets.GasGiant;
 	import com.whitesword.space.planets.Moon;
 	import com.whitesword.space.planets.Planet;
-	import com.whitesword.space.planets.PlanetAtmosphere;
 	import com.whitesword.space.planets.Star;
 	import com.whitesword.space.planets.Terrestrial;
 	import com.whitesword.utils.ArrayList;
@@ -25,9 +24,9 @@ package com.whitesword.space.systems
 			this.galaxy = galaxy;
 		}
 		
-		public function generateSystem()
+		public function generateSystem():System
 		{
-			stars.add(new Star(this));
+			stars.add(new Star(this).generateStar());
 			
 			if(Math.floor(Math.random() * 20) == 0)
 			{
@@ -41,22 +40,26 @@ package com.whitesword.space.systems
 				
 				if(Math.random() < 0.5)
 				{
-					planet = new GasGiant(this);
+					planet = new GasGiant(this).generateGasGiant();
 				}
 				else
 				{
-					planet = new Terrestrial(this);
+					planet = new Terrestrial(this).generateTerrestrial();
 				}
 				
 				planets.add(planet);
 			}
+			
+			return this;
 		}
 		
-		public function loadSystem(name:String, stars:ArrayList, planets:ArrayList)
+		public function loadSystem(name:String, stars:ArrayList, planets:ArrayList):System
 		{
 			this.name = name;
 			this.stars = stars;
 			this.planets = planets;
+			
+			return this;
 		}
 		
 		public function getGalaxy():Galaxy
@@ -109,6 +112,7 @@ package com.whitesword.space.systems
 			return planets;
 		}
 		
+		/*
 		public static function createSolSystem(galaxy:Galaxy):System
 		{
 			var sol:System = new System(galaxy);
@@ -128,24 +132,28 @@ package com.whitesword.space.systems
 				
 			return sol;
 		}
+		*/
 		
-		public function getSaveData():String
+		public function getSaveData():XML
 		{
-			var data:String = "<system>\n\t<name>" + getMainStar().getName() + "</name>\n";
+			var xml:XML = new XML("<system />");
+			var starsXml:XML = new XML("<stars />");
+			var planetsXml:XML = new XML("<planets />");
 			
 			for each(var star:Star in stars)
 			{
-				data += SpaceUtil.indentXML(star.getSaveData(), 1);
+				starsXml.appendChild(star.getSaveData());
 			}
 			
 			for each(var planet:Planet in planets)
 			{
-				data += SpaceUtil.indentXML(planet.getSaveData(), 1);
+				planetsXml.appendChild(planet.getSaveData());
 			}
 			
-			data += "</system>\n";
+			xml.appendChild(starsXml);
+			xml.appendChild(planetsXml);
 			
-			return data;
+			return xml;
 		}
 	}
 }
