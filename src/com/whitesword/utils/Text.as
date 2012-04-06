@@ -15,7 +15,7 @@ package com.whitesword.utils
 	
 	public class Text extends Sprite
 	{
-		protected var fontSize:int = 50;
+		protected var fontSize:int;
 		protected var startText:String;
 		protected var textField:TextField = new TextField;
 		
@@ -24,13 +24,13 @@ package com.whitesword.utils
 		 * Set centered to true to have the font align center.
 		 * Set resize to true if you want the text to resize itself to fit perfectly in the text field.
 		 */
-		public function Text(s:String)
+		public function Text(s:String, fontSize:int=50, textFormatAlign:String=TextFormatAlign.LEFT)
 		{
 			textField.text = s;
-			
+			this.fontSize = fontSize;
 			var tf:TextFormat = new TextFormat("NaxcraftSpace", fontSize);
 			
-			tf.align = TextFormatAlign.LEFT;
+			tf.align = textFormatAlign;
 			
 			textField.defaultTextFormat = tf;
 			textField.setTextFormat(tf);

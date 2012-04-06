@@ -2,16 +2,23 @@ package com.whitesword.space.planets
 {
 	import com.whitesword.space.systems.System;
 	import com.whitesword.utils.ArrayList;
+	
+	import flash.display.Bitmap;
 
 	public class Star extends Planet
 	{
 		public static var sunNames:ArrayList = new ArrayList();
 		
+		[Embed(source="res/star_color.png")]
+		public static var StarColorImage:Class;
+		public static var starColor:Bitmap = new StarColorImage();
+		
+		//static
 		{
 			sunNames.addAll(
-				"Eri","Cas","Sco","Crucis","Cancri","Leonis","Canis Majoris","ri",
+				"Eri","Cas","Sco","Crucis","Cancri","Leonis","Canis Majoris","Ri",
 				"Cygni","Capricorni","Cephei","Ursae Majoris","Columbae","Gruis",
-				"Aquilae","ae","Andromedae","ginis","Sagitti","Aqui","Corvi","Uma",
+				"Aquilae","Ae","Andromedae","Ginis","Sagitti","Aqui","Corvi","Uma",
 				"Draconis","Coronae Australis","Persei","Pegasi","Aurigae","Geminorum",
 				"Bootis","Crats","Orionis","Hydrae","","Piscium","Lyncis","Serpentis",
 				"Phoenicis","Leporis","Cnae","Canum Venaticorum","Trianguli Australis",
@@ -29,44 +36,43 @@ package com.whitesword.space.planets
 		
 		public function generateStar():Star
 		{
-			name = getRandomSunName();
-			mass = Math.random() * 4;
+			var name:String = getRandomSunName();
+			var starRandom:int = int(Math.floor(Math.random() * 100));
 			
-			gravity = getMass() + Math.random() * 5 - 2.5;
+			//TODO: Generate binary, trinary stars
+			if(starRandom <= 20 && starRandom > 5)
+			{
+				trace("Binary Star System!");
+			}
+			else if(starRandom <= 5)
+			{
+				trace("Trinary Star System!");	
+			}
 			
-			rotationSpeed = 0.005;
+			for(var i:int = 0; i < 10; i++)
+			{
+				if(getSystem().getGalaxy().hasStarName(name))
+				{
+					name = getRandomSunName();
+				}
+				else
+				{
+					break;
+				}
+			}
 			
-			atmosphere = new PlanetAtmosphere(this);
+			setName(name);
+			
+			setTemperature(Math.random()); // 0 - 1, sets color as well
+			setHumidity(0);
+			setSize(getTemperature());
 			
 			return this;
 		}
 		
-		public function loadStar(name:String, mass:Number, gravity:Number, rotationSpeed:Number, temperature:Number, atmosphere:PlanetAtmosphere):Star
+		public function getColor():uint
 		{
-			this.name = name;
-			this.mass = mass;
-			this.gravity = gravity;
-			this.rotationSpeed = rotationSpeed;
-			this.temperature = temperature;
-			this.atmosphere = atmosphere;
-			
-			return this;
-		}
-		
-		/**
-		 * Relative to the sun. (332948.6 more than Earth)
-		 */
-		public override function getMass():Number
-		{
-			return mass;
-		}
-		
-		/**
-		 * Relative to the sun. (28 more than Earth)
-		 */
-		public override function getGravity():Number
-		{
-			return gravity;
+			return starColor.bitmapData.getPixel(getTemperature() * 50, 0);
 		}
 		
 		public static function getRandomSunName():String

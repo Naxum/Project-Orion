@@ -1,5 +1,7 @@
 package 
 {
+	import com.whitesword.space.galaxy.Galaxy;
+	import com.whitesword.space.planets.Star;
 	import com.whitesword.space.races.AlienRace;
 	import com.whitesword.space.races.AlienRaceCharacteristic;
 	import com.whitesword.space.races.AlienRaceHistory;

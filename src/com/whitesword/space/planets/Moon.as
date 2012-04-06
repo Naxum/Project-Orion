@@ -3,21 +3,29 @@ package com.whitesword.space.planets
 	import com.whitesword.space.systems.System;
 	import com.whitesword.utils.SpaceUtil;
 	
-	public class Moon extends Satellite
+	public class Moon extends Planet
 	{
+		private var parent:Planet;
+		
 		public function Moon(planet:Planet)
 		{
 			super(planet.getSystem());
-			
-			name = planet.getName() + " " + SpaceUtil.getNumeralFromNumber(planet.getChildren().size());
-			
-			mass = Math.random() * (planet.getMass() * 0.05) + 0.1;
-			
-			gravity = Math.random() * 1.5 + 0.2;
-			
-			rotationSpeed = mass + (Math.random() * 2 - 1);
-			
-			atmosphere = new PlanetAtmosphere(this);
+			this.parent = planet;
+		}
+		
+		public function generateMoon():Moon
+		{
+			setName(getParent().getName() + " " + SpaceUtil.getNumeralFromNumber(getParent().getChildren().size()));
+			setTemperature((Math.random() * 0.5) + (getParent().getTemperature())); 
+			setSize(Math.random() / (getParent().getChildren().size()+1));
+			setHumidity(Math.random());
+				
+			return this;
+		}
+		
+		public function getParent():Planet
+		{
+			return parent;
 		}
 	}
 }

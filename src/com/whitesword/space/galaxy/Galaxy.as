@@ -13,13 +13,18 @@ package com.whitesword.space.galaxy
 		public function Galaxy(universe:Universe)
 		{			
 			this.universe = universe;
-			
+		}
+		
+		public function generateGalaxy():Galaxy
+		{
 			for(var i:int = 0; i < Math.random() * 20 + 25; i++)
 			{
-				systems.add(new System(this));
+				systems.add(new System(this).generateSystem());
 			}
 			
 			trace("Galaxy Created with " + systems.size() + " systems.");
+			
+			return this;
 		}
 		
 		public function addSystem(system:System):void
@@ -32,18 +37,40 @@ package com.whitesword.space.galaxy
 			return universe;
 		}
 		
-		public function getSaveData():String
+		public function hasStarName(s:String):Boolean
 		{
-			var data:String = "<galaxy name='A'>\n";
+			for each(var system:System in systems)
+			{
+				if(system.getMainStar() == null)
+				{
+					trace("Checking star names, a system is null.");
+					continue;
+				}
+				
+				if(system.getMainStar().getName() == s)
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		public function getSystems():ArrayList
+		{
+			return systems;
+		}
+		
+		public function getSaveData():XML
+		{
+			var xml:XML = new XML("<galaxy />");
 			
 			for each(var system:System in systems)
 			{
-				data += SpaceUtil.indentXML(system.getSaveData(), 1);
+				xml.appendChild(system.getSaveData());
 			}
 			
-			data += "</galaxy>\n";
-			
-			return data;
+			return xml;
 		}
 	}
 }
