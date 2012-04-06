@@ -122,9 +122,11 @@ package com.whitesword.space.systems
 			var venus:Terrestrial = new Terrestrial(sol).loadTerrestrial("Venus", 0.815, 0.91, 0.004, new PlanetAtmosphere(venus), new ArrayList()); //orbit: 1.18
 			
 			var earth:Terrestrial = new Terrestrial(sol)
-			earth.loadTerrestrial("Earth", 1, 1, 1, new PlanetAtmosphere(earth), new ArrayList(moon));
+			//earth.loadTerrestrial("Earth", 1, 1, 1, new PlanetAtmosphere(earth), new ArrayList(moon));
 			
-			sol.loadSystem("Sol", stars, planets);
+			//sol.loadSystem("Sol", stars, planets);
+				
+			return sol;
 		}
 		
 		public function getSaveData():String

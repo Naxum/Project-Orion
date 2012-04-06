@@ -52,7 +52,14 @@ package
 			// support autoOrients
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.color = 0x000000;
+			//stage.color = 0x000000;
+			var s:Shape = new Shape();
+			
+			s.graphics.beginFill(0x000000);
+			s.graphics.drawRect(0,0,1024,768);
+			s.graphics.endFill();
+			
+			addChild(s);
 			
 			//trace("Initial stage width: " + stage.stageWidth + ", height: " + stage.stageHeight);
 			
