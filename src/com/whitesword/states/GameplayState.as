@@ -58,7 +58,7 @@ package com.whitesword.states
 				
 				var star:Shape = new Shape();
 				star.graphics.beginFill(system.getMainStar().getColor());
-				star.graphics.drawCircle(0, 0, system.getMainStar().getSize() * 80);
+				star.graphics.drawCircle(0, 0, system.getMainStar().getSize() * 80 + 20);
 				star.graphics.endFill();
 				
 				sprite.addChild(star);
